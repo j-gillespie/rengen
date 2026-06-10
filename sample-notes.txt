@@ -1,0 +1,81 @@
+ANVIL
+--------------------------------
+Traditional blacksmith’s anvil featuring a flat face, a pointed horn on one side, and a stepped heel on the other side. Available through mail order. Weighs approximately 150 lbs (68.03 kg). Made of wrought iron and steel. 
+
+Dimensions:
+    • Height: 11-3/8" offering an ideal working height for various metalworking tasks. 
+    • Horn Length: 10-3/16" for effective shaping and bending. 
+    • Face Dimensions: 16-3/4" x 4-3/16" providing a large, stable striking surface. 
+    • Base Dimensions: 9-7/16" x 10-3/8" ensuring exceptional stability during use. 
+    • Overall Length: 23-3/4" offering ample workspace for diverse forging projects.
+    • Material: Forged from high-grade 41/40 tool steel.
+
+To set up the anvil, position it over a specific target area no wider than 12 inches. Note: For precision, try using ACME birdseed (sold separately) as bait. Tie one end of a rope or pull-cord around the flat face of the anvil. Use a heavy-duty pulley to hoist the anvil to the desired elevation, and then tie the free end of the rope or pull-cord around a boulder to secure the anvil in place.
+
+The following issues are resolved in this release:
+00001, Tool integrity is compromised upon extreme impact
+00002, Protective coating is apparently flammable
+00003, Anvil is prone to “reverse-gravity spells”
+
+
+BIRD SEED
+--------------------------------
+
+
+HOT AIR BALLOON
+--------------------------------
+
+
+PAINT KIT
+--------------------------------
+
+
+ROCKET-POWERED ROLLER SKATES
+--------------------------------
+Rocket-powered skates designed to achieve Mach 1. Adaptable power source: rocket fuel or high voltage electricity.
+
+Known issue: ACME skates do not include an inter
+
+Installation: No assembly required. Tightly fasten the skates over your feet or paws, and ensure rocket exhaust nozzles are facing away from the direction you plan to travel.
+
+This release features a hand-held remote starter.
+
+
+SUPERSONIC ROCKET
+--------------------------------
+WHAT'S NEW
+- Added adjustable thrust modulator with three settings: low, medium, and high. Replaces the fixed-output nozzle from v3.0.x.
+- New quick-release fuel canister mechanism. Swap canisters in under 10 seconds without tools.
+- Overhauled targeting reticle UI. Reticle now shows wind speed and estimated trajectory arc in real time.
+- Reduced ignition lag from 2.4s to 0.8s. Firmware change, no hardware required.
+- Added compatibility with ACME-brand Parachute Recovery System (sold separately).
+
+BUGS FIXED
+- #4801: Fuel gauge displayed incorrect reading after partial refill. Fixed calculation in firmware.
+- #4823: Launch button unresponsive at temperatures below 20°F. Root cause was stiff polymer in trigger housing; replaced with cold-rated material.
+- #4788: Targeting reticle flickered when device was tilted more than 45 degrees. Fixed gyroscope calibration routine.
+- #4756: Parachute recovery port cover would not reseat after opening. Redesigned latch mechanism.
+
+KNOWN ISSUES
+- #4901: Thrust modulator setting resets to "low" after firmware update. Workaround: manually reset preferred thrust level after updating.
+- #4912: Real-time trajectory arc may display incorrectly at wind speeds above 40 mph. No workaround at this time; fix targeted for v3.1.1.
+
+SYSTEM REQUIREMENTS
+- Compatible with ACME Fuel Canisters Type-R and Type-X only. Type-M canisters (discontinued 2022) are not supported.
+- Firmware update requires ACME Device Manager v2.0 or later (Windows 10/11, macOS 12+).
+- Operating temperature range: -10°F to 130°F.
+- Minimum operator age: 18 years.
+
+INSTALLATION / UPDATE
+- Take components out of shipping box, and carefully remove packaging material.
+- Insert the “U” end of the tubular rocket body (B) into the opening of the cone (C), and tighten all screws. 
+- Insert the “D” end of the rocket body into the open side of the tail piece (T), and tighten all screws on the tail housing. Note: Take care not to bend or break any of the fins (F1, F2, F3, F4) that are affixed to the tail piece.
+- Pack the rocket parachute into the aft compartment and close the compartment door (D).
+- From the opening in the tail piece (O), pull out a length of fuse; each 5 inches of fuse allows an approximate 10-second delay before launch time.
+- Connect operator harness (H) to rocket body using the metal hooks (H1, H2) on the rocket.
+
+SUPPORT NOTES
+- Field reports of the #4912 trajectory issue should be logged via the ACME support portal with wind speed reading at time of issue.
+- Warranty covers manufacturing defects only. Damage resulting from use with non-ACME fuel canisters is not covered.
+
+Now ships with a separate Just-in-Time (JIT) parachute for rocket operators.

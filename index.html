@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Release Notes Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        .form-container {
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="date"], select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        #output-container {
+            display: none;
+            max-width: 600px;
+            margin-top: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #output-container h3 {
+            margin-top: 0;
+        }
+        #output {
+            width: 100%;
+            min-height: 300px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+        }
+        #error-msg {
+            color: #cc0000;
+            margin-top: 10px;
+            display: none;
+        }
+        .output-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>ACME Product Release Notes</h2>
+    <form id="release-form">
+
+        <div class="form-group">
+            <label for="product">Product</label>
+            <select id="product" name="product" required>
+                <option value="">Select a solution</option>
+                <option value="Anvil">Anvil</option>
+                <option value="Bird Seed">Bird Seed</option>
+                <option value="Hot Air Balloon">Hot Air Balloon</option>
+                <option value="Paint Kit">Paint Kit</option>
+				<option value="Rocket-Powered Roller Skates">Rocket-Powered Roller Skates</option>
+                <option value="Supersonic Rocket">Supersonic Rocket</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="version">Version</label>
+            <input type="text" id="version" name="version" placeholder="e.g., v1.2.0" required>
+        </div>
+
+        <div class="form-group">
+            <label for="release-date">Release Date</label>
+            <input type="date" id="release-date" name="release_date" required>
+        </div>
+
+        <div class="form-group">
+            <label for="details">Details</label>
+            <textarea id="details" name="details" rows="20"
+                placeholder="Provide notes or details for this product release" required></textarea>
+        </div>
+
+        <button type="reset" onclick="clearOutput()">Clear</button>
+        <button type="submit" id="submit-btn">Generate Release Notes</button>
+    </form>
+</div>
+
+<div id="output-container">
+    <h3>Generated Release Notes</h3>
+    <div id="output"></div>
+    <p id="error-msg"></p>
+    <div class="output-actions">
+        <button onclick="copyOutput()">Copy to Clipboard</button>
+    </div>
+</div>
+
+<script>
+    // Ollama runs locally at this address.
+    // Change the model name here if you pulled a different one (e.g., "mistral", "llama3.2").
+    const OLLAMA_URL = "http://localhost:11434/api/generate";
+    const OLLAMA_MODEL = "gemma2:2b";
+
+    // Convert YYYY-MM-DD (native date input format) to MM/DD/YYYY
+    function formatDate(isoDate) {
+        const [year, month, day] = isoDate.split("-");
+        return `${month}/${day}/${year}`;
+    }
+
+    // Build the prompt using form values
+    function buildPrompt(product, version, releaseDate, details) {
+        return `You are an expert technical writer. Transform the raw engineering notes below into polished, professional release notes using the exact template provided. Sort and place each piece of information into the most appropriate section. Use active voice and be concise. If a section has no relevant information in the notes, write "None for this release."
+
+TEMPLATE:
+
+${product} ${version} Release Notes
+${releaseDate}
+
+Overview
+High-level summary of the release — scope, goals, and version highlights.
+
+New Features
+New capabilities, UI improvements, performance enhancements, and workflow changes. Use a bullet list.
+
+Resolved Issues
+Format each as: [ISSUE_ID] Description
+Use a bullet list. If no issue IDs are mentioned, use BUG-001, BUG-002, etc.
+
+Known Issues
+Format each as: [ISSUE_ID] | Description | Workaround
+If no workaround exists, write "None."
+
+System Requirements & Compatibility
+Supported operating systems, platforms, hardware, and dependencies.
+
+Installation
+Instructions for installing the product, update, or patch.
+
+Technical Support
+For assistance with this product, contact the ACME Technical Support team through your standard service desk channel or email support@acme.example.com. Include the product name, version, and a detailed description of the issue.
+
+RAW NOTES:
+${details}
+
+Return only the completed release notes. Follow these formatting rules exactly:
+- Do not include any preamble, explanation, or closing remarks. Begin immediately with the title.
+- Wrap the title line in <b> tags.
+- Wrap each section heading (Overview, New Features, Resolved Issues, Known Issues, System Requirements & Compatibility, Installation, Technical Support) in <b> tags.
+- Do not use markdown formatting symbols such as #, **, or *.`;
+    }
+
+    // Handle form submission
+    document.getElementById("release-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const product     = document.getElementById("product").value;
+        const version     = document.getElementById("version").value;
+        const releaseDate = formatDate(document.getElementById("release-date").value);
+        const details     = document.getElementById("details").value;
+
+        const submitBtn       = document.getElementById("submit-btn");
+        const outputContainer = document.getElementById("output-container");
+        const outputArea      = document.getElementById("output");
+        const errorMsg        = document.getElementById("error-msg");
+
+        // Reset state
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Generating...";
+        outputContainer.style.display = "none";
+        errorMsg.style.display = "none";
+        outputArea.value = "";
+
+        try {
+            const response = await fetch(OLLAMA_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    model: OLLAMA_MODEL,
+                    prompt: buildPrompt(product, version, releaseDate, details),
+                    stream: false
+                })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.error || `HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            outputArea.innerHTML = data.response;
+            outputContainer.style.display = "block";
+            outputContainer.scrollIntoView({ behavior: "smooth" });
+
+        } catch (err) {
+            // Provide a helpful message if Ollama is not running
+            const isConnectionError = err.message.includes("Failed to fetch") || err.message.includes("NetworkError");
+            errorMsg.textContent = isConnectionError
+                ? "Could not connect to Ollama. Make sure Ollama is running with CORS enabled. See README for instructions."
+                : "Error: " + err.message;
+            errorMsg.style.display = "block";
+            outputContainer.style.display = "block";
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Generate Release Notes";
+        }
+    });
+
+    // Copy output to clipboard
+    function copyOutput() {
+        const output = document.getElementById("output");
+        navigator.clipboard.writeText(output.innerText)
+            .then(() => alert("Copied to clipboard!"))
+            .catch(() => alert("Copy failed — please select and copy manually."));
+    }
+
+    // Clear output panel when the form is reset
+    function clearOutput() {
+        document.getElementById("output-container").style.display = "none";
+        document.getElementById("output").innerHTML = "";
+        document.getElementById("error-msg").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
