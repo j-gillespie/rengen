@@ -86,6 +86,7 @@
             gap: 10px;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 </head>
 <body>
 
@@ -228,7 +229,7 @@ Return only the completed release notes. Follow these formatting rules exactly:
             }
 
             const data = await response.json();
-            outputArea.innerHTML = data.response;
+            outputArea.innerHTML = marked.parse(data.response);
             outputContainer.style.display = "block";
             outputContainer.scrollIntoView({ behavior: "smooth" });
 
