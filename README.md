@@ -60,7 +60,6 @@ Open `index.html` in your web browser; no local server is needed.
 
 ### 3. Generate release notes
 
-To use the ACME Product Release Notes Generator:
 1. Select a solution from the dropdown menu (options are hard-coded in index.html).
 2. Enter the version number.
 3. Select the release date.
