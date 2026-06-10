@@ -209,7 +209,7 @@ Return only the completed release notes. Follow these formatting rules exactly:
         submitBtn.textContent = "Generating...";
         outputContainer.style.display = "none";
         errorMsg.style.display = "none";
-        outputArea.value = "";
+        outputArea.innerHTML = "";
 
         try {
             const response = await fetch(OLLAMA_URL, {
